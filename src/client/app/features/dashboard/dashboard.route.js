@@ -35,7 +35,8 @@
                         news: function() {
                             return {
                                 title: 'helloWorld',
-                                description: 'Hot Towel Angular is a SPA template for Angular developers.'
+                                description: 'Hot Towel Angular is a SPA template ' +
+                                'for Angular developers.'
                             };
                         }
                     }

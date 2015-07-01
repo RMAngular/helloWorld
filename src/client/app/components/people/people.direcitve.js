@@ -12,7 +12,7 @@
             controller: PeopleController,
             controllerAs: 'vm',
             bindToController: true
-        }
+        };
     }
 
     PeopleController.$inject = [];
@@ -23,7 +23,7 @@
         vm.clickPerson = clickPerson;
 
         function clickPerson(person) {
-            alert(JSON.stringify(person));
+            window.alert(JSON.stringify(person));
         }
     }
 })();

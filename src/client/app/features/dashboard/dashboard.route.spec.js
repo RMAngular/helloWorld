@@ -1,15 +1,19 @@
 /* jshint -W117, -W030 */
 describe('dashboard routes', function () {
     describe('state', function () {
-        var controller;
-        var view = 'app/dashboard/dashboard.html';
+        var controller,
+            view = 'app/features/dashboard/dashboard.html',
+            people = mockData.getMockPeople();
 
         beforeEach(function() {
             module('app.dashboard', bard.fakeToastr);
-            bard.inject('$httpBackend', '$location', '$rootScope', '$state', '$templateCache');
+            bard.inject('$httpBackend', '$location', '$rootScope', '$state', '$q',
+                '$templateCache', 'dataservice');
         });
 
         beforeEach(function() {
+            sinon.stub(dataservice, 'getPeople').returns($q.when(people));
+            sinon.stub(dataservice, 'getMessageCount').returns($q.when(10));
             $templateCache.put(view, '');
         });
 

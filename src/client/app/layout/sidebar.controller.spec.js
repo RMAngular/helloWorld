@@ -3,7 +3,7 @@ describe('layout', function() {
     describe('sidebar', function() {
         var controller;
         var views = {
-            dashboard: 'app/dashboard/dashboard.html',
+            dashboard: 'app/features/dashboard/dashboard.html',
             customers: 'app/customers/customers.html'
         };
 

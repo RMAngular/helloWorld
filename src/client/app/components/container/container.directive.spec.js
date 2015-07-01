@@ -2,14 +2,14 @@
 (function() {
     'use strict';
 
-    describe('Directive: people', function() {
+    describe('Directive: container', function() {
 
         var baseMock,
             element,
             vm;
 
         beforeEach(function() {
-            bard.appModule('app.components.people');
+            bard.appModule('app.components.container');
             bard.inject(
                 '$compile',
                 '$q',
@@ -20,14 +20,14 @@
         });
 
         beforeEach(function() {
-            var html = angular.element('<people></people>');
+            var html = angular.element('<container></container>');
             $rootScope = $rootScope.$new();
-            $templateCache.put('app/components/people/people.html', '');
+            $templateCache.put('app/components/container/container.html', '');
             element = $compile(html)($rootScope);
 
             $rootScope.$digest(element);
 
-            vm = element.controller('people');
+            vm = element.controller('container');
         });
 
         bard.verifyNoOutstandingHttpRequests();
