@@ -1,25 +1,26 @@
-(function () {
-    'use strict';
+(function() {
+    angular.module('app.components.people')
+        .directive('people', peopleDirective);
 
-    angular
-        .module('app.dashboard')
-        .controller('DashboardController', DashboardController);
+    function peopleDirective () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/people/people.html',
+            scope: {},
+            controller: PeopleController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
 
-    DashboardController.$inject = ['$q', 'dataservice', 'logger'];
-    /* @ngInject */
-    function DashboardController($q, dataservice, logger) {
+    PeopleController.$inject = ['$q', 'dataservice', 'logger'];
+
+    function PeopleController($q, dataservice, logger) {
         var vm = this;
-        vm.news = {
-            title: 'helloWorld',
-            description: 'Hot Towel Angular is a SPA template for Angular developers.'
-        };
-        vm.messageCount = 0;
-        vm.people = [];
-        vm.title = 'Dashboard';
 
-        activate();
+        vm.init = init;
 
-        function activate() {
+        function init() {
             var promises = [getMessageCount(), getPeople()];
             return $q.all(promises).then(function() {
                 logger.info('Activated Dashboard View');

@@ -28,5 +28,6 @@ tests/test-unit.html
 protractor_html/
 .DS_Store
 report/
+build/
 
 src/test-unit.html
