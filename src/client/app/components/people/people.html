@@ -1,7 +1,7 @@
 <div class="widget wviolet" ng-init="vm.init()">
     <div ht-widget-header title="People"
-         allow-collapse="true"></div>
-    <div class="widget-content text-center text-info">
+         allow-collapse="true" ng-click="vm.showPeople = !vm.showPeople"></div>
+    <div class="widget-content text-center text-info" ng-show="vm.showPeople">
         <table class="table table-condensed table-striped">
             <thead>
             <tr>
