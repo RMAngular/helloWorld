@@ -3,8 +3,11 @@ describe('DashboardController', function() {
     var controller;
 
     beforeEach(function() {
-        bard.appModule('app.dashboard', 'app.resolve.messageCount', 'app.resolve.people', 'app.resolve.news');
-        bard.inject('$controller', '$log', '$q', '$rootScope', 'messageCount', 'people', 'news');
+        bard.appModule('app.dashboard', 'app.resolve.messageCount',
+            'app.resolve.people', 'app.resolve.news');
+
+        bard.inject('$controller', '$log', '$q', '$rootScope',
+            'messageCount', 'people', 'news');
     });
 
     beforeEach(function () {

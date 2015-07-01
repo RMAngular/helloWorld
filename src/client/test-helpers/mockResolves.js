@@ -1,6 +1,6 @@
-(function(){
+(function() {
     angular.module('app.resolve.people', [])
-        .constant('people', mockData.getMockPeople());
+        .constant('people', window.mockData.getMockPeople());
 
     angular.module('app.resolve.messageCount', [])
         .constant('messageCount', 73);
