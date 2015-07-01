@@ -12,7 +12,8 @@
             },
             controller: ContainerController,
             controllerAs: 'vm',
-            bindToController: true
+            bindToController: true,
+            transclude: true
         }
     }
 
