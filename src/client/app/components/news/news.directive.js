@@ -6,7 +6,9 @@
         return {
             restrict: 'E',
             templateUrl: 'app/components/news/news.html',
-            scope: {},
+            scope: {
+                news: '='
+            },
             controller: NewsController,
             controllerAs: 'vm',
             bindToController: true
@@ -15,10 +17,5 @@
 
     function NewsController() {
         var vm = this;
-
-        vm.news = {
-            title: 'helloWorld',
-            description: 'Hot Towel Angular is a SPA template for Angular developers.'
-        };
     }
 })();

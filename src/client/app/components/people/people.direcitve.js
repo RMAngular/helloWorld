@@ -6,39 +6,24 @@
         return {
             restrict: 'E',
             templateUrl: 'app/components/people/people.html',
-            scope: {},
+            scope: {
+                people: '='
+            },
             controller: PeopleController,
             controllerAs: 'vm',
             bindToController: true
         }
     }
 
-    PeopleController.$inject = ['$q', 'dataservice', 'logger'];
+    PeopleController.$inject = [];
 
-    function PeopleController($q, dataservice, logger) {
+    function PeopleController() {
         var vm = this;
 
-        vm.init = init;
+        vm.clickPerson = clickPerson;
 
-        function init() {
-            var promises = [getMessageCount(), getPeople()];
-            return $q.all(promises).then(function() {
-                logger.info('Activated Dashboard View');
-            });
-        }
-
-        function getMessageCount() {
-            return dataservice.getMessageCount().then(function (data) {
-                vm.messageCount = data;
-                return vm.messageCount;
-            });
-        }
-
-        function getPeople() {
-            return dataservice.getPeople().then(function (data) {
-                vm.people = data;
-                return vm.people;
-            });
+        function clickPerson(person) {
+            alert(JSON.stringify(person));
         }
     }
 })();

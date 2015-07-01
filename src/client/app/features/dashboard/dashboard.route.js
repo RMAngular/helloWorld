@@ -5,13 +5,13 @@
         .module('app.dashboard')
         .run(appRun);
 
-    appRun.$inject = ['routerHelper'];
+    appRun.$inject = ['routerHelper', 'dataservice'];
     /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
+    function appRun(routerHelper, dataservice) {
+        routerHelper.configureStates(getStates(dataservice));
     }
 
-    function getStates() {
+    function getStates(dataservice) {
         return [
             {
                 state: 'dashboard',
@@ -24,6 +24,20 @@
                     settings: {
                         nav: 1,
                         content: '<i class="fa fa-dashboard"></i> Dashboard'
+                    },
+                    resolve: {
+                        messageCount: function() {
+                            return dataservice.getMessageCount();
+                        },
+                        people: function() {
+                            return dataservice.getPeople();
+                        },
+                        news: function() {
+                            return {
+                                title: 'helloWorld',
+                                description: 'Hot Towel Angular is a SPA template for Angular developers.'
+                            };
+                        }
                     }
                 }
             }

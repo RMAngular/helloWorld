@@ -5,11 +5,19 @@
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
+    DashboardController.$inject = ['logger', 'messageCount', 'people', 'news']
     /* @ngInject */
-    function DashboardController() {
+    function DashboardController(logger, messageCount, people, news) {
         var vm = this;
 
-        vm.messageCount = 0;
+        vm.messageCount = messageCount;
+        vm.people = people;
+        vm.news = news;
+
+        function init() {
+            logger.info('Activated Dashboard View');
+        }
+
         vm.title = 'Dashboard';
     }
 })();
