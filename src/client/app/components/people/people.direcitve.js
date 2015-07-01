@@ -19,7 +19,6 @@
         var vm = this;
 
         vm.init = init;
-        vm.showPeople = true;
 
         function init() {
             var promises = [getMessageCount(), getPeople()];
