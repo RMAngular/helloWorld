@@ -4,8 +4,7 @@
 
     describe('Directive: news', function() {
 
-        var baseMock,
-            element,
+        var element,
             vm;
 
         beforeEach(function() {
@@ -32,7 +31,7 @@
 
         bard.verifyNoOutstandingHttpRequests();
 
-        it('Opens the location.directive', function () {
+        it('Opens the container directive', function () {
             expect(element).to.be.ok();
             expect(vm).to.be.ok();
         });
