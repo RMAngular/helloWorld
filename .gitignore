@@ -20,6 +20,8 @@ tmp/
 #Data
 data/
 
+build/
+
 #Build Process
 xunit.xml
 tests/results/
