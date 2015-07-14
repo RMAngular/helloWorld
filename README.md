@@ -1,268 +1,758 @@
-# helloWorld
+This demo takes the AngularJS Hot Towel project written by John Papa and refactors it into reusable components while following best practices (https://github.com/johnpapa/angular-styleguide).  At the end of this demo you will have and good understanding of how to take a view/controller based application and refactor it into reusable web components.  You will understand best practices as recommended by the Google AngularJS team and you will have a working example to refer back to.
 
-**Generated from HotTowel Angular**
+##Master (step 1) 
+Create baseline using hot towel angular generator project: https://github.com/johnpapa/generator-hottowel
 
->*Opinionated Angular style guide for teams by [@john_papa](//twitter.com/john_papa)*
+Follow the Prerequisite and Quick Start instructions to get the hot towel project up and running.  Once the project has been created, run the project with gulp serve-dev
 
->More details about the styles and patterns used in this app can be found in my [Angular Style Guide](https://github.com/johnpapa/angularjs-styleguide) and my [Angular Patterns: Clean Code](http://jpapa.me/ngclean) course at [Pluralsight](http://pluralsight.com/training/Authors/Details/john-papa) and working in teams.
+### What’s great about this project
+- Great gulp file for serving and building the project
+- nodemon picks up file changes and immediately refreshes
+- modularized file structure where folder contains all necessary code
+- Browser Sync
+- Bower and app files are auto added to index.html
+- Build process makes releasing code simple
 
-## Prerequisites
+###What’s not so great
+- Views/Controllers architecture
+- No reusable components
+- No tests
+- Need more folder structure to organize code
+- Doesn’t use router resolve to get data
 
-1. Install [Node.js](http://nodejs.org)
- - on OSX use [homebrew](http://brew.sh) `brew install node`
- - on Windows use [chocolatey](https://chocolatey.org/) `choco install nodejs`
+## Step 2 - Create our first directive
+Create new folders to organize code into:
 
-2. Install Yeoman `npm install -g yo`
+- src/client/app/components
+- src/client/app/components/people
+- src/client/app/features
 
-3. Install these NPM packages globally
+###Refactor People grid into directive component
+- IIFE
+- Isolated scope
+- Components vs Directives
+- controllerAs and bindToController syntax
+- $inject
+- named functions and public vs private functions
 
-    ```bash
-    npm install -g bower gulp nodemon
-    ```
+#### Files to create
 
-    >Refer to these [instructions on how to not require sudo](https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md)
+src/client/app/components
+- components.module.js
 
-## Running HotTowel
+- src/client/app/components/people
+people.directive.js
+people.directive.spec.js
+people.html
+people.module.js
 
-### Linting
- - Run code analysis using `gulp vet`. This runs jshint, jscs, and plato.
-
-### Tests
- - Run the unit tests using `gulp test` (via karma, mocha, sinon).
-
-### Running in dev mode
- - Run the project with `gulp serve-dev`
-
- - opens it in a browser and updates the browser with any files changes.
-
-### Building the project
- - Build the optimized project using `gulp build`
- - This create the optimized code for the project and puts it in the build folder
-
-### Running the optimized code
- - Run the optimize project from the build folder with `gulp serve-build`
-
-## Exploring HotTowel
-HotTowel Angular starter project
-
-### Structure
-The structure also contains a gulpfile.js and a server folder. The server is there just so we can serve the app using node. Feel free to use any server you wish.
-
-	/src
-		/client
-			/app
-			/content
-
-### Installing Packages
-When you generate the project it should run these commands, but if you notice missing packages, run these again:
-
- - `npm install`
- - `bower install`
-
-### The Modules
-The app has 4 feature modules and depends on a series of external modules and custom but cross-app modules
-
+#### components.module.js
+Defines the components module and allows us to enable and disable components as desired
 ```
-app --> [
-        app.admin --> [
-            app.core,
-            app.widgets
-        ],
-        app.dashboard --> [
-            app.core,
-            app.widgets
-        ],
-        app.layout --> [
-            app.core
-        ],
-        app.widgets,
-		app.core --> [
-			ngAnimate,
-			ngSanitize,
-			ui.router,
-			blocks.exception,
-			blocks.logger,
-			blocks.router
-		]
-    ]
+(function() {
+    'use strict';
+
+    angular.module('app.components.people', []);
+})();
 ```
 
-#### core Module
-Core modules are ones that are shared throughout the entire application and may be customized for the specific application. Example might be common data services.
-
-This is an aggregator of modules that the application will need. The `core` module takes the blocks, common, and Angular sub-modules as dependencies.
-
-#### blocks Modules
-Block modules are reusable blocks of code that can be used across projects simply by including them as dependencies.
-
-##### blocks.logger Module
-The `blocks.logger` module handles logging across the Angular app.
-
-##### blocks.exception Module
-The `blocks.exception` module handles exceptions across the Angular app.
-
-It depends on the `blocks.logger` module, because the implementation logs the exceptions.
-
-##### blocks.router Module
-The `blocks.router` module contains a routing helper module that assists in adding routes to the $routeProvider.
-
-## Gulp Tasks
-
-### Task Listing
-
-- `gulp help`
-
-    Displays all of the available gulp tasks.
-
-### Code Analysis
-
-- `gulp vet`
-
-    Performs static code analysis on all javascript files. Runs jshint and jscs.
-
-- `gulp vet --verbose`
-
-    Displays all files affected and extended information about the code analysis.
-
-- `gulp plato`
-
-    Performs code analysis using plato on all javascript files. Plato generates a report in the reports folder.
-
-### Testing
-
-- `gulp serve-specs`
-
-    Serves and browses to the spec runner html page and runs the unit tests in it. Injects any changes on the fly and re runs the tests. Quick and easy view of tests as an alternative to terminal via `gulp test`.
-
-- `gulp test`
-
-    Runs all unit tests using karma runner, mocha, chai and sinon with phantomjs. Depends on vet task, for code analysis.
-
-- `gulp test --startServers`
-
-    Runs all unit tests and midway tests. Cranks up a second node process to run a server for the midway tests to hit a web api.
-
-- `gulp autotest`
-
-    Runs a watch to run all unit tests.
-
-- `gulp autotest --startServers`
-
-    Runs a watch to run all unit tests and midway tests. Cranks up a second node process to run a server for the midway tests to hit a web api.
-
-### Cleaning Up
-
-- `gulp clean`
-
-    Remove all files from the build and temp folders
-
-- `gulp clean-images`
-
-    Remove all images from the build folder
-
-- `gulp clean-code`
-
-    Remove all javascript and html from the build folder
-
-- `gulp clean-fonts`
-
-    Remove all fonts from the build folder
-
-- `gulp clean-styles`
-
-    Remove all styles from the build folder
-
-### Fonts and Images
-
-- `gulp fonts`
-
-    Copy all fonts from source to the build folder
-
-- `gulp images`
-
-    Copy all images from source to the build folder
-
-### Styles
-
-- `gulp styles`
-
-    Compile less files to CSS, add vendor prefixes, and copy to the build folder
-
-### Bower Files
-
-- `gulp wiredep`
-
-    Looks up all bower components' main files and JavaScript source code, then adds them to the `index.html`.
-
-    The `.bowerrc` file also runs this as a postinstall task whenever `bower install` is run.
-
-### Angular HTML Templates
-
-- `gulp templatecache`
-
-    Create an Angular module that adds all HTML templates to Angular's $templateCache. This pre-fetches all HTML templates saving XHR calls for the HTML.
-
-- `gulp templatecache --verbose`
-
-    Displays all files affected by the task.
-
-### Serving Development Code
-
-- `gulp serve-dev`
-
-    Serves the development code and launches it in a browser. The goal of building for development is to do it as fast as possible, to keep development moving efficiently. This task serves all code from the source folders and compiles less to css in a temp folder.
-
-- `gulp serve-dev --nosync`
-
-    Serves the development code without launching the browser.
-
-- `gulp serve-dev --debug`
-
-    Launch debugger with node-inspector.
-
-- `gulp serve-dev --debug-brk`
-
-    Launch debugger and break on 1st line with node-inspector.
-
-### Building Production Code
-
-- `gulp html`
-
-    Optimize all javascript and styles, move to a build folder, and inject them into the new index.html
-
-- `gulp build`
-
-    Copies all fonts, copies images and runs `gulp html` to build the production code to the build folder.
-
-### Serving Production Code
-
-- `gulp serve-build`
-
-    Serve the optimized code from the build folder and launch it in a browser.
-
-- `gulp serve-build --nosync`
-
-    Serve the optimized code from the build folder and manually launch the browser.
-
-- `gulp serve-build --debug`
-
-    Launch debugger with node-inspector.
-
-- `gulp serve-build --debug-brk`
-
-    Launch debugger and break on 1st line with node-inspector.
-
-### Bumping Versions
-
-- `gulp bump`
-
-    Bump the minor version using semver.
-    --type=patch // default
-    --type=minor
-    --type=major
-    --type=pre
-    --ver=1.2.3 // specific version
-
-## License
-
-MIT
+#### people.directive.js
+Defines the element base directive for the people grid
+```
+(function() {
+    angular.module('app.components.people')
+        .directive('people', peopleDirective);
+
+    function peopleDirective () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/people/people.html',
+            scope: {},
+            controller: PeopleController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
+
+    PeopleController.$inject = ['$q', 'dataservice', 'logger'];
+
+    function PeopleController($q, dataservice, logger) {
+        var vm = this;
+
+        vm.init = init;
+
+        function init() {
+            var promises = [getMessageCount(), getPeople()];
+            return $q.all(promises).then(function() {
+                logger.info('Activated Dashboard View');
+            });
+        }
+
+        function getMessageCount() {
+            return dataservice.getMessageCount().then(function (data) {
+                vm.messageCount = data;
+                return vm.messageCount;
+            });
+        }
+
+        function getPeople() {
+            return dataservice.getPeople().then(function (data) {
+                vm.people = data;
+                return vm.people;
+            });
+        }
+    }
+})();
+```
+
+#### people.html
+HTML removed from `dashboard.html` and placed into this file
+```
+<div class="widget wviolet" ng-init="vm.init()">
+    <div ht-widget-header title="People"
+         allow-collapse="true"></div>
+    <div class="widget-content text-center text-info">
+        <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="p in vm.people">
+                <td>{{p.firstName}}</td>
+                <td>{{p.lastName}}</td>
+                <td>{{p.age}}</td>
+                <td>{{p.location}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="widget-foot">
+        <div class="clearfix"></div>
+    </div>
+</div>
+```
+
+##### Minor changes
+- modified gulp to not track WebStorm specific files
+- add app.components.people module as a dependency to app.components
+- replaced person HTML with `<person></person>` directive tag
+- removed people data code from dashboard.controller.js
+
+##Step 3 - Create News Directive
+
+### Create new folder and file to organize code into:
+
+- src/client/app/components/news
+
+news.directive.js
+news.directive.spec.js
+news.html
+news.module.js
+
+
+#### news.directive.js
+```
+(function() {
+    angular.module('app.components.news')
+        .directive('news', newsDirective);
+
+    function newsDirective() {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/news/news.html',
+            scope: {},
+            controller: NewsController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
+
+    function NewsController() {
+        var vm = this;
+
+        vm.news = {
+            title: 'helloWorld',
+            description: 'Hot Towel Angular is a SPA template for Angular developers.'
+        };
+    }
+})();
+```
+
+#### news.html
+```
+<div class="widget wgreen">
+    <div ht-widget-header title="{{vm.news.title}}"
+         allow-collapse="true"></div>
+    <div class="widget-content text-center text-info">
+        <small>{{vm.news.description}}</small>
+    </div>
+    <div class="widget-foot">
+        <div class="clearfix"></div>
+    </div>
+</div>
+```
+
+#### news.module.js
+```
+(function() {
+    'use strict';
+
+    angular.module('app.components.news', []);
+})();
+```
+
+##### minor changes
+- add app.components.news module as a dependency to app.components
+- replaced news HTML with `<news></news>` directive tag
+- removed news data code from dashboard.controller.js
+
+## Step 4 - Handle a Click Event to Show/Hide Data
+
+Our directives display data.  Let’s add a click event to show and hide the data.
+
+### Add view model showPeople variable to people directive
+
+`vm.showPeople = true;`
+
+### Modify html to show/hide people grid
+```
+<div class="widget wviolet" ng-init="vm.init()">
+    <div ht-widget-header title="People"
+         allow-collapse="true" ng-click="vm.showPeople = !vm.showPeople"></div>
+    <div class="widget-content text-center text-info" ng-show="vm.showPeople">
+        <table class="table table-condensed table-striped">
+...
+```
+
+##Step 5 - Decompose Directives into Smaller Components
+
+### Create new folder and file to organize code into:
+
+- src/client/app/components/container
+
+container.directive.js
+container.directive.spec.js
+container.html
+container.module.js
+
+
+#### container.directive.js
+```
+(function() {
+    angular.module('app.components.container')
+        .directive('container', containerDirective);
+
+    function containerDirective() {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/container/container.html',
+            scope: {
+                title: '@',
+                color: '@'
+            },
+            controller: ContainerController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
+
+    function ContainerController() {
+        var vm = this;
+
+        vm.wColor = 'w' + vm.color;
+        vm.showContent = true;
+    }
+})();
+```
+
+#### container.html
+```
+<div class="widget" ng-class="vm.wColor">
+    <div ht-widget-header title="{{vm.title}}"
+         allow-collapse="true" ng-click="vm.showContent = !vm.showContent"></div>
+    <div class="widget-content text-center text-info" ng-show="vm.showContent">
+        <people></people>
+    </div>
+    <div class="widget-foot">
+        <div class="clearfix"></div>
+    </div>
+</div>
+```
+
+#### container.module.js
+```
+(function() {
+    'use strict';
+
+    angular.module('app.components.container', []);
+})();
+```
+
+##### minor changes
+- add app.components.container module as a dependency to app.components
+- replaced news HTML with `<container></container>` directive tag
+- removed container HTML from people.html
+
+#### Bad Point
+This directive only works the people directive.  The news directive needs the same exact container directive.
+
+## Step 6 - Decomposition Done Right - Transclusion
+
+Our container directive should work with any directive and shouldn’t be limited to just working with the people directive.  
+
+#### - Add Transclude property to the container directive
+```
+function containerDirective() {
+    return {
+        restrict: 'E',
+        templateUrl: 'app/components/container/container.html',
+        scope: {
+            title: '@',
+            color: '@'
+        },
+        controller: ContainerController,
+        controllerAs: 'vm',
+        bindToController: true,
+        transclude: true
+    }
+}
+```
+
+#### Replace people directive with ng-transclude directive in our HTML
+```
+<div class="widget" ng-class="vm.wColor">
+    <div ht-widget-header title="{{vm.title}}"
+         allow-collapse="true" ng-click="vm.showContent = !vm.showContent"></div>
+    <div class="widget-content text-center text-info" ng-show="vm.showContent">
+        <ng-transclude></ng-transclude>
+    </div>
+    <div class="widget-foot">
+        <div class="clearfix"></div>
+    </div>
+</div>
+```
+
+#### Remove container HTML from news.html
+```
+<small>{{vm.news.description}}</small>
+```
+
+#### Modify dashboard.html to use container directive with transcluded people and news directives.
+```
+<section id="dashboard-view" class="mainbar">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="today-datas">
+                        <li class="blightblue">
+                            <div class="pull-left"><i class="fa fa-plane"></i></div>
+                            <div class="datas-text pull-right">
+                                <span class="bold">May 18 - 19, 2015</span> Castle Resort, Neverland
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+
+                        <li class="borange">
+                            <div class="pull-left"><i class="fa fa-envelope"></i></div>
+                            <div class="datas-text pull-right">
+                                <span class="bold">{{vm.messageCount}}</span> Messages
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <container title="People" color="violet">
+                        <people></people>
+                    </container>
+                </div>
+                <div class="col-md-6">
+                    <container title="News" color="red">
+                        <news></news>
+                    </container>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+```
+
+## Step 7 - Resolve our data
+
+Let the route load the data and decorate the directive with the data
+
+#### dashboard.route.js
+```
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper', 'dataservice'];
+    /* @ngInject */
+    function appRun(routerHelper, dataservice) {
+        routerHelper.configureStates(getStates(dataservice));
+    }
+
+    function getStates(dataservice) {
+        return [
+            {
+                state: 'dashboard',
+                config: {
+                    url: '/',
+                    templateUrl: 'app/features/dashboard/dashboard.html',
+                    controller: 'DashboardController',
+                    controllerAs: 'vm',
+                    title: 'dashboard',
+                    settings: {
+                        nav: 1,
+                        content: '<i class="fa fa-dashboard"></i> Dashboard'
+                    },
+                    resolve: {
+                        messageCount: function() {
+                            return dataservice.getMessageCount();
+                        },
+                        people: function() {
+                            return dataservice.getPeople();
+                        },
+                        news: function() {
+                            return {
+                                title: 'helloWorld',
+                                description: 'Hot Towel Angular is a SPA template for Angular developers.'
+                            };
+                        }
+                    }
+                }
+            }
+        ];
+    }
+})();
+```
+
+#### Inject the resolved data into dashboard.controller.js
+```
+(function () {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardController', DashboardController);
+
+    DashboardController.$inject = ['logger', 'messageCount', 'people', 'news']
+    /* @ngInject */
+    function DashboardController(logger, messageCount, people, news) {
+        var vm = this;
+
+        vm.messageCount = messageCount;
+        vm.people = people;
+        vm.news = news;
+
+        function init() {
+            logger.info('Activated Dashboard View');
+        }
+
+        vm.title = 'Dashboard';
+    }
+})();
+```
+
+#### Decorate the directives with the controllers view model data in dashboard.html
+```
+<div class="row">
+    <div class="col-md-6">
+        <container title="People" color="violet">
+            <people people="vm.people"></people>
+        </container>
+    </div>
+    <div class="col-md-6">
+        <container title="News" color="red">
+            <news news="vm.news"></news>
+        </container>
+    </div>
+</div>
+```
+
+#### Pass people data to people.directive.js using isolated scope
+```
+(function() {
+    angular.module('app.components.people')
+        .directive('people', peopleDirective);
+
+    function peopleDirective () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/people/people.html',
+            scope: {
+                people: '='
+            },
+            controller: PeopleController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
+
+    PeopleController.$inject = [];
+
+    function PeopleController() {
+        var vm = this;
+
+        vm.clickPerson = clickPerson;
+
+        function clickPerson(person) {
+            alert(JSON.stringify(person));
+        }
+    }
+})();
+```
+
+#### Modify people.html to handle when user clicks on a person row
+```
+<table class="table table-condensed table-striped">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Location</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="p in vm.people" ng-click="vm.clickPerson(p)">
+        <td>{{p.firstName}}</td>
+        <td>{{p.lastName}}</td>
+        <td>{{p.age}}</td>
+        <td>{{p.location}}</td>
+    </tr>
+    </tbody>
+</table>
+```
+
+#### Pass news data to news.directive.js
+```
+(function() {
+    angular.module('app.components.news')
+        .directive('news', newsDirective);
+
+    function newsDirective() {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/news/news.html',
+            scope: {
+                news: '='
+            },
+            controller: NewsController,
+            controllerAs: 'vm',
+            bindToController: true
+        }
+    }
+
+    function NewsController() {
+        var vm = this;
+    }
+})();
+```
+
+## Step 8 - How do we test our code???
+
+#### Test people directive
+```
+/* jshint -W117, -W030 */
+(function() {
+    'use strict';
+
+    describe('Directive: people', function() {
+
+        var element,
+            vm;
+
+        beforeEach(function() {
+            bard.appModule('app.components.people');
+            bard.inject(
+                '$compile',
+                '$q',
+                '$rootScope',
+                '$state',
+                '$templateCache'
+            );
+        });
+
+        beforeEach(function() {
+            var html = angular.element('<people></people>');
+            $rootScope = $rootScope.$new();
+            $templateCache.put('app/components/people/people.html', '');
+            element = $compile(html)($rootScope);
+
+            $rootScope.$digest(element);
+
+            vm = element.controller('people');
+        });
+
+        bard.verifyNoOutstandingHttpRequests();
+
+        it('Opens the people directive', function () {
+            expect(element).to.be.ok();
+            expect(vm).to.be.ok();
+        });
+    });
+})();
+```
+
+#### Test the news directive
+```
+/* jshint -W117, -W030 */
+(function() {
+    'use strict';
+
+    describe('Directive: news', function() {
+
+        var element,
+            vm;
+
+        beforeEach(function() {
+            bard.appModule('app.components.news');
+            bard.inject(
+                '$compile',
+                '$q',
+                '$rootScope',
+                '$state',
+                '$templateCache'
+            );
+        });
+
+        beforeEach(function() {
+            var html = angular.element('<news></news>');
+            $rootScope = $rootScope.$new();
+            $templateCache.put('app/components/news/news.html', '');
+            element = $compile(html)($rootScope);
+
+            $rootScope.$digest(element);
+
+            vm = element.controller('news');
+        });
+
+        bard.verifyNoOutstandingHttpRequests();
+
+        it('Opens the news directive', function () {
+            expect(element).to.be.ok();
+            expect(vm).to.be.ok();
+        });
+    });
+})();
+```
+
+#### Test the container directive
+```
+/* jshint -W117, -W030 */
+(function() {
+    'use strict';
+
+    describe('Directive: container', function() {
+
+        var element,
+            vm;
+
+        beforeEach(function() {
+            bard.appModule('app.components.container');
+            bard.inject(
+                '$compile',
+                '$q',
+                '$rootScope',
+                '$state',
+                '$templateCache'
+            );
+        });
+
+        beforeEach(function() {
+            var html = angular.element('<container></container>');
+            $rootScope = $rootScope.$new();
+            $templateCache.put('app/components/container/container.html', '');
+            element = $compile(html)($rootScope);
+
+            $rootScope.$digest(element);
+
+            vm = element.controller('container');
+        });
+
+        bard.verifyNoOutstandingHttpRequests();
+
+        it('Opens the container directive', function () {
+            expect(element).to.be.ok();
+            expect(vm).to.be.ok();
+        });
+    });
+})();
+```
+
+
+## Step 9 - Additional things to consider
+
+#### Refactor dashboard.router.js
+```
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .run(appRun);
+
+    appRun.$inject = ['routerHelper'];
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
+
+    function getStates() {
+        return [
+            {
+                state: 'dashboard',
+                config: {
+                    url: '/',
+                    templateUrl: 'app/features/dashboard/dashboard.html',
+                    controller: 'DashboardController',
+                    controllerAs: 'vm',
+                    title: 'dashboard',
+                    settings: {
+                        nav: 1,
+                        content: '<i class="fa fa-dashboard"></i> Dashboard'
+                    },
+                    resolve: {
+                        messageCount: messageCount,
+                        people: people,
+                        news: news
+                    }
+                }
+            }
+        ];
+
+        messageCount.$inject = ['dataservice'];
+        function messageCount(dataservice) {
+            return dataservice.getMessageCount();
+        }
+
+        people.$inject = ['dataservice'];
+        function people(dataservice) {
+            return dataservice.getPeople();
+        }
+
+        news.$inject = ['dataservice'];
+        function news() {
+            return {
+                title: 'helloWorld',
+                description: 'Hot Towel Angular is a SPA template ' +
+                'for Angular developers.'
+            };
+        }
+    }
+})();
+```
