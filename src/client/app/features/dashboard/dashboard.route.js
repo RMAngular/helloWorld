@@ -5,13 +5,13 @@
         .module('app.dashboard')
         .run(appRun);
 
-    appRun.$inject = ['routerHelper', 'dataservice'];
+    appRun.$inject = ['routerHelper'];
     /* @ngInject */
-    function appRun(routerHelper, dataservice) {
-        routerHelper.configureStates(getStates(dataservice));
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
     }
 
-    function getStates(dataservice) {
+    function getStates() {
         return [
             {
                 state: 'dashboard',
@@ -26,22 +26,31 @@
                         content: '<i class="fa fa-dashboard"></i> Dashboard'
                     },
                     resolve: {
-                        messageCount: function() {
-                            return dataservice.getMessageCount();
-                        },
-                        people: function() {
-                            return dataservice.getPeople();
-                        },
-                        news: function() {
-                            return {
-                                title: 'helloWorld',
-                                description: 'Hot Towel Angular is a SPA template ' +
-                                'for Angular developers.'
-                            };
-                        }
+                        messageCount: messageCount,
+                        people: people,
+                        news: news
                     }
                 }
             }
         ];
+
+        messageCount.$inject = ['dataservice'];
+        function messageCount(dataservice) {
+            return dataservice.getMessageCount();
+        }
+
+        people.$inject = ['dataservice'];
+        function people(dataservice) {
+            return dataservice.getPeople();
+        }
+
+        news.$inject = ['dataservice'];
+        function news() {
+            return {
+                title: 'helloWorld',
+                description: 'Hot Towel Angular is a SPA template ' +
+                'for Angular developers.'
+            };
+        }
     }
 })();
