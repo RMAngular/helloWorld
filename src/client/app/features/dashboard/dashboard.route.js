@@ -12,7 +12,7 @@
     }
 
     function getStates() {
-        return [
+        var route = [
             {
                 state: 'dashboard',
                 config: {
@@ -52,5 +52,7 @@
                 'for Angular developers.'
             };
         }
+
+        return route;
     }
 })();
