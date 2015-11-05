@@ -12,7 +12,7 @@
             controller: NewsController,
             controllerAs: 'vm',
             bindToController: true
-        }
+        };
     }
 
     function NewsController() {

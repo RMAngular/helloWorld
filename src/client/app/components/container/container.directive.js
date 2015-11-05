@@ -14,7 +14,7 @@
             controllerAs: 'vm',
             bindToController: true,
             transclude: true
-        }
+        };
     }
 
     function ContainerController() {

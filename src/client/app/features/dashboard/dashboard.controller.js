@@ -5,7 +5,8 @@
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['logger', 'messageCount', 'people', 'news']
+    DashboardController.$inject = ['logger', 'messageCount', 'people', 'news'];
+
     /* @ngInject */
     function DashboardController(logger, messageCount, people, news) {
         var vm = this;
